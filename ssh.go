@@ -34,26 +34,42 @@ type ConnectionOptions struct {
 	Password string
 }
 
-func (k6ssh *K6SSH) Connect(options ConnectionOptions) error {
+func (k6ssh *K6SSH) rsaKeyAuthMethod(options ConnectionOptions) (ssh.AuthMethod, error) {
 	var pk string
 	if options.RsaKey != "" {
 		pk = options.RsaKey
 	} else {
 		pk = k6ssh.defaultKeyPath()
 	}
+
 	key, err := ioutil.ReadFile(pk)
 	if err != nil {
-		return err
+		return nil, err
 	}
+
 	signer, err := ssh.ParsePrivateKey(key)
 	if err != nil {
-		return err
+		return nil, err
+	}
+	return ssh.PublicKeys(signer), nil
+}
+
+func (k6ssh *K6SSH) Connect(options ConnectionOptions) error {
+	var authMethod ssh.AuthMethod
+	var err error
+	if options.Password != "" {
+		authMethod = ssh.Password(options.Password)
+	} else {
+		authMethod, err = k6ssh.rsaKeyAuthMethod(options)
+		if err != nil {
+			return err
+		}
 	}
 
 	k6ssh.Config = &ssh.ClientConfig{
 		Config:          ssh.Config{},
 		User:            options.Username,
-		Auth:            []ssh.AuthMethod{ssh.PublicKeys(signer)},
+		Auth:            []ssh.AuthMethod{authMethod},
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 		ClientVersion:   "",
 		Timeout:         0,
