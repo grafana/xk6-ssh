@@ -4,8 +4,8 @@ export default function () {
   ssh.connect({
     username: 'YOUR_USERNAME',
 	  host: "YOUR_HOST",
-    password: "YOUR_PASSWORD",
+    sudo_password: "YOUR_SUDO_PASSWORD",
 	  port: 22
   })
-  console.log(ssh.run(['pwd', 'ls -la']));
+  console.log(ssh.run(['sudo pwd'], { sudo: true }))
 }
