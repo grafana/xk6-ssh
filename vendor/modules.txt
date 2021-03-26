@@ -1,0 +1,18 @@
+# github.com/loadimpact/k6 v0.30.0
+## explicit
+github.com/loadimpact/k6/js/internal/modules
+github.com/loadimpact/k6/js/modules
+# golang.org/x/crypto v0.0.0-20210317152858-513c2a44f670
+## explicit
+golang.org/x/crypto/blowfish
+golang.org/x/crypto/chacha20
+golang.org/x/crypto/curve25519
+golang.org/x/crypto/ed25519
+golang.org/x/crypto/ed25519/internal/edwards25519
+golang.org/x/crypto/internal/subtle
+golang.org/x/crypto/poly1305
+golang.org/x/crypto/ssh
+golang.org/x/crypto/ssh/internal/bcrypt_pbkdf
+# golang.org/x/sys v0.0.0-20210319071255-635bc2c9138d
+## explicit
+golang.org/x/sys/cpu
