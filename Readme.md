@@ -81,3 +81,10 @@ default ✓ [======================================] 1 VUs  00m01.4s/10m0s  1/1 
 ```
 
 Inspect examples folder for more details.
+
+
+## FAQ
+
+### How to start `sudo` commands?
+
+Basically we don't provide sudo password autofill. We suggest to use `/etc/sudoers` for this purpose. Please checkout this [article](https://www.cyberciti.biz/faq/linux-unix-running-sudo-command-without-a-password/) for more details.
