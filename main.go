@@ -1,6 +1,6 @@
 package xk6ssh
 
-import "github.com/loadimpact/k6/js/modules"
+import "go.k6.io/k6/js/modules"
 
 const version = "v0.0.1"
 
