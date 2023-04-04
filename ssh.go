@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path"
 
@@ -18,7 +17,6 @@ type RSAKey struct {
 
 // SSH is the main export of k6 docker extension
 type K6SSH struct {
-	Version string
 	Session *ssh.Session
 	Client  *ssh.Client
 	Config  *ssh.ClientConfig
@@ -42,7 +40,7 @@ func (k6ssh *K6SSH) rsaKeyAuthMethod(options ConnectionOptions) (ssh.AuthMethod,
 		pk = k6ssh.defaultKeyPath()
 	}
 
-	key, err := ioutil.ReadFile(pk)
+	key, err := os.ReadFile(pk)
 	if err != nil {
 		return nil, err
 	}
