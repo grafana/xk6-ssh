@@ -1,18 +1,5 @@
-> ### ⚠️ This is a proof of concept
->
-> As this is a proof of concept,  it won't be supported by the k6 team.
-> It may also break in the future as xk6 evolves. USE AT YOUR OWN RISK!
-> Any issues with the tool should be raised [here](https://github.com/k6io/xk6-ssh/issues).
-
-</br>
-</br>
-
-<div align="center">
-
 # xk6-ssh
-A k6 extension for using of SSH in testing. Built for [k6](https://go.k6.io/k6) using [xk6](https://github.com/k6io/xk6).
-
-</div>
+A k6 extension for using of SSH in testing. Built for [k6](https://github.com/grafana/k6) using [xk6](https://github.com/grafana/xk6).
 
 ## Build
 
@@ -25,13 +12,15 @@ Then:
 
 1. Download `xk6`:
   ```bash
-  $ go install github.com/k6io/xk6/cmd/xk6@latest
+  go install github.com/grafana/xk6/cmd/xk6@latest
   ```
 
 2. Build the binary:
   ```bash
-  $ xk6 build --with github.com/k6io/xk6-ssh@latest
+  xk6 build --with github.com/grafana/xk6-ssh@latest
   ```
+
+This will result in a `k6` binary in the current directory.
 
 ## Example
 
@@ -40,9 +29,10 @@ import ssh from 'k6/x/ssh';
 
 export default function () {
   ssh.connect({
-    username: 'USERNAME',
-	  host: "HOST_ADDRESS",
-	  port: 22
+    username: `${__ENV.K6_USERNAME}`,
+    password: `${__ENV.K6_PASSWORD}`,
+    host: [HOSTNAME],
+	port: 22
   })
   console.log(ssh.run('pwd'))
 }
@@ -80,8 +70,32 @@ default ✓ [======================================] 1 VUs  00m01.4s/10m0s  1/1 
 
 ```
 
-Inspect examples folder for more details.
+## Testing Locally
+This repo includes a [docker-compose.yml](docker-compose.yml) file that starts an [OpenSSH Server](https://docs.linuxserver.io/images/docker-openssh-server) from [LinuxServer.io](https://www.linuxserver.io/).
+The `examples` directory contains scripts that are configured to work with this environment out of the box.
 
+> :warning: Be sure that you've already compiled your custom `k6` binary as described in the [Build](#build) section!
+
+We'll use this environment to run some examples.
+
+1. Start the docker compose environment.
+
+   ```shell
+   docker compose up -d
+   ```
+   Once you see the following, you should be ready.
+   ```shell
+   [+] Running 2/2
+    ⠿ Network xk6-ssh_default             Created
+    ⠿ Container xk6-ssh-openssh-server-1  Started
+   ```
+   Next, we'll use the `k6` binary we compiled in the [Build section](#build) above.
+
+1. Using our custom `k6` binary, we can execute our [example scripts](examples/).
+   ```shell
+   ./k6 run examples/connect-by-rsa-key.js
+   ``` 
+   The RSA example will then connect to the local SSH server using the `example_rsa` private key.
 
 ## FAQ
 
