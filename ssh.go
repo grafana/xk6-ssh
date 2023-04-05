@@ -7,23 +7,22 @@ import (
 	"os"
 	"path"
 
+	"github.com/spf13/afero"
+
 	"golang.org/x/crypto/ssh"
 )
 
-type RSAKey struct {
-	file     string
-	password string
-}
-
-// SSH is the main export of k6 docker extension
+// K6SSH is the main export of the k6 extension
 type K6SSH struct {
 	Session *ssh.Session
 	Client  *ssh.Client
 	Config  *ssh.ClientConfig
 	Out     *bytes.Buffer
 	Stdin   io.WriteCloser
+	fs      afero.Fs
 }
 
+// ConnectionOptions provides configuration for the SSH session
 type ConnectionOptions struct {
 	RsaKey   string
 	Host     string
@@ -40,7 +39,7 @@ func (k6ssh *K6SSH) rsaKeyAuthMethod(options ConnectionOptions) (ssh.AuthMethod,
 		pk = k6ssh.defaultKeyPath()
 	}
 
-	key, err := os.ReadFile(pk)
+	key, err := afero.ReadFile(k6ssh.fs, pk)
 	if err != nil {
 		return nil, err
 	}
@@ -52,6 +51,7 @@ func (k6ssh *K6SSH) rsaKeyAuthMethod(options ConnectionOptions) (ssh.AuthMethod,
 	return ssh.PublicKeys(signer), nil
 }
 
+// Connect starts and SSH session with the provided options
 func (k6ssh *K6SSH) Connect(options ConnectionOptions) error {
 	var authMethod ssh.AuthMethod
 	var err error
@@ -65,9 +65,10 @@ func (k6ssh *K6SSH) Connect(options ConnectionOptions) error {
 	}
 
 	k6ssh.Config = &ssh.ClientConfig{
-		Config:          ssh.Config{},
-		User:            options.Username,
-		Auth:            []ssh.AuthMethod{authMethod},
+		Config: ssh.Config{},
+		User:   options.Username,
+		Auth:   []ssh.AuthMethod{authMethod},
+		// #nosec G106
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 		ClientVersion:   "",
 		Timeout:         0,
@@ -82,7 +83,8 @@ func (k6ssh *K6SSH) Connect(options ConnectionOptions) error {
 	return nil
 }
 
-func (conn *K6SSH) defaultKeyPath() string {
+func (k6ssh *K6SSH) defaultKeyPath() string {
+	//nolint: forbidigo
 	home := os.Getenv("HOME")
 	if len(home) > 0 {
 		return path.Join(home, ".ssh/id_rsa")
@@ -90,12 +92,15 @@ func (conn *K6SSH) defaultKeyPath() string {
 	return ""
 }
 
+// Run executes a remote command over SSH
 func (k6ssh *K6SSH) Run(command string) (string, error) {
 	session, err := k6ssh.Client.NewSession()
 	if err != nil {
 		return "", err
 	}
-	defer session.Close()
+	defer func() {
+		_ = session.Close()
+	}()
 	var stdoutBuf bytes.Buffer
 	session.Stdout = &stdoutBuf
 	err = session.Run(command)
