@@ -2,8 +2,6 @@ module github.com/grafana/xk6-ssh
 
 go 1.23.0
 
-toolchain go1.24.3
-
 require (
 	github.com/spf13/afero v1.14.0
 	go.k6.io/k6 v1.0.0
