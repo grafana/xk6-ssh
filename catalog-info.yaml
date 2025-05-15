@@ -6,7 +6,6 @@ metadata:
   description: |
     Client extension for interacting with a host over SSH as part of your k6 test.
   annotations:
-    backstage.io/techdocs-ref: dir:.
     github.com/project-slug: grafana/xk6-ssh
 spec:
   type: library
