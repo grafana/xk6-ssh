@@ -23,11 +23,12 @@ type K6SSH struct {
 
 // ConnectionOptions provides configuration for the SSH session.
 type ConnectionOptions struct {
-	RsaKey   string
-	Host     string
-	Port     int
-	Username string
-	Password string
+	RsaKey     string
+	Passphrase string
+	Host       string
+	Port       int
+	Username   string
+	Password   string
 }
 
 // Connect starts and SSH session with the provided options.
@@ -99,7 +100,12 @@ func (k6ssh *K6SSH) rsaKeyAuthMethod(options ConnectionOptions) (ssh.AuthMethod,
 		return nil, err
 	}
 
-	signer, err := ssh.ParsePrivateKey(key)
+	var signer ssh.Signer
+	if options.Passphrase != "" {
+		signer, err = ssh.ParsePrivateKeyWithPassphrase(key, []byte(options.Passphrase))
+	} else {
+		signer, err = ssh.ParsePrivateKey(key)
+	}
 	if err != nil {
 		return nil, err
 	}
