@@ -106,6 +106,7 @@ func (k6ssh *K6SSH) rsaKeyAuthMethod(options ConnectionOptions) (ssh.AuthMethod,
 	} else {
 		signer, err = ssh.ParsePrivateKey(key)
 	}
+
 	if err != nil {
 		return nil, err
 	}
