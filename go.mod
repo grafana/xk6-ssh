@@ -3,7 +3,7 @@ module github.com/grafana/xk6-ssh
 go 1.23.0
 
 require (
-	github.com/spf13/afero v1.14.0
+	github.com/spf13/afero v1.15.0
 	go.k6.io/k6 v1.2.3
 	golang.org/x/crypto v0.41.0
 )
