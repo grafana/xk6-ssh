@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   openssh-server:
-    image: linuxserver/openssh-server:latest
+    image: linuxserver/openssh-server:latest@sha256:3d63be67c9b82423c5efa15ad1cf42f89e6c0d40bb269374b69649a5fa7d261a
     environment:
       - PUBLIC_KEY=
         ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDFj+MNxxbNXjHBM6M8btIkeAoeLkGt5fkmlAW7lYDcRIQj06FX0SGWK+yL2kHY6sxJJbmxchSmb4J/BJkHY22+OuWjxfO/YIEL3faWmwbISgPnky7R77IW7M95OBzOQvWXv2AXUlXatqg6GDmeCQlqLHzfKgwUHosP61tGMnFf8NFOtBNIgKpopODSqD3eq79bv//9NHu0xbajheL01Yg3XbvFYKlo0thvYITqvC+kX++K9PyrwSK/LPGIW0xqXvFEwlDqOcSrIbfkzRPkco6/3ANfPrYDlnT1MpTcPJGH31wk85AUPE6axK0CL4vsEICrhmXJff2hqRKHvAjMhU+deHlb3DCMwJ8dkFpuRBs9FQbIOjC/mrNTEm9JFCOQj3/y/TwyxjYQk/SaUFGWuYgIOmfnKfDWJ2LS3woEJKvUAdaH55NlKkedvoOWNTcHmaWzEalCy4bSAA0knn+ubfHQ0pqQ2P+Eg3BEikMIh7crlVfGTOCh2q+5ccpVNY004YE= sshuser@docker.local
