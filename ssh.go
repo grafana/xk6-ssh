@@ -28,7 +28,7 @@ type ConnectionOptions struct {
 	Host       string
 	Port       int
 	Username   string
-	Password   string
+	Password   string //nolint:gosec
 }
 
 // Connect starts and SSH session with the provided options.
@@ -81,6 +81,7 @@ func (k6ssh *K6SSH) Run(command string) (string, error) {
 	}()
 
 	var stdoutBuf bytes.Buffer
+
 	session.Stdout = &stdoutBuf
 	err = session.Run(command)
 
