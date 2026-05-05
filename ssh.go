@@ -81,6 +81,7 @@ func (k6ssh *K6SSH) Run(command string) (string, error) {
 	}()
 
 	var stdoutBuf bytes.Buffer
+
 	session.Stdout = &stdoutBuf
 	err = session.Run(command)
 
