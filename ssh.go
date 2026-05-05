@@ -28,7 +28,7 @@ type ConnectionOptions struct {
 	Host       string
 	Port       int
 	Username   string
-	Password   string //nolint:gosec
+	Password   string
 }
 
 // Connect starts and SSH session with the provided options.
