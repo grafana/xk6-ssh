@@ -7,7 +7,7 @@ toolchain go1.25.10
 require (
 	github.com/spf13/afero v1.15.0
 	go.k6.io/k6/v2 v2.0.0-rc1
-	golang.org/x/crypto v0.51.0
+	golang.org/x/crypto v0.52.0
 )
 
 require (
