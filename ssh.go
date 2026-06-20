@@ -28,7 +28,7 @@ type ConnectionOptions struct {
 	Host       string
 	Port       int
 	Username   string
-	Password   string
+	Password   string //nolint:gosec // user-supplied connection password option, not a hardcoded credential
 }
 
 // Connect starts and SSH session with the provided options.
@@ -116,7 +116,7 @@ func (k6ssh *K6SSH) rsaKeyAuthMethod(options ConnectionOptions) (ssh.AuthMethod,
 }
 
 func (k6ssh *K6SSH) defaultKeyPath() string {
-	home := os.Getenv("HOME")
+	home := os.Getenv("HOME") //nolint:forbidigo // locating the user's default SSH key requires the home dir
 	if len(home) > 0 {
 		return path.Join(home, ".ssh/id_rsa")
 	}
