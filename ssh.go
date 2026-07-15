@@ -24,6 +24,7 @@ type K6SSH struct {
 // ConnectionOptions provides configuration for the SSH session.
 type ConnectionOptions struct {
 	RsaKey     string
+	PrivateKey string
 	Passphrase string
 	Host       string
 	Port       int
@@ -89,16 +90,21 @@ func (k6ssh *K6SSH) Run(command string) (string, error) {
 }
 
 func (k6ssh *K6SSH) rsaKeyAuthMethod(options ConnectionOptions) (ssh.AuthMethod, error) {
-	var pk string
-	if options.RsaKey != "" {
-		pk = options.RsaKey
-	} else {
-		pk = k6ssh.defaultKeyPath()
-	}
+	var key []byte
+	var err error
 
-	key, err := afero.ReadFile(k6ssh.fs, pk)
-	if err != nil {
-		return nil, err
+	if options.PrivateKey != "" {
+		key = []byte(options.PrivateKey)
+	} else {
+		pk := options.RsaKey
+		if pk == "" {
+			pk = k6ssh.defaultKeyPath()
+		}
+
+		key, err = afero.ReadFile(k6ssh.fs, pk)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	var signer ssh.Signer
