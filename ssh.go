@@ -24,7 +24,7 @@ type K6SSH struct {
 // ConnectionOptions provides configuration for the SSH session.
 type ConnectionOptions struct {
 	RsaKey     string
-	PrivateKey string
+	PrivateKey string //nolint:gosec // user-supplied private key contents option, not a hardcoded credential
 	Passphrase string
 	Host       string
 	Port       int

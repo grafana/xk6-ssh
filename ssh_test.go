@@ -21,6 +21,7 @@ func testPEM(t *testing.T) string {
 }
 
 func TestRsaKeyAuthMethod_InlinePrivateKey(t *testing.T) {
+	t.Parallel()
 	// MemMapFs guarantees no key file exists on disk; inline contents must be used.
 	k := &K6SSH{fs: afero.NewMemMapFs()}
 	auth, err := k.rsaKeyAuthMethod(ConnectionOptions{PrivateKey: testPEM(t)})
@@ -33,6 +34,7 @@ func TestRsaKeyAuthMethod_InlinePrivateKey(t *testing.T) {
 }
 
 func TestRsaKeyAuthMethod_InlineTakesPrecedenceOverPath(t *testing.T) {
+	t.Parallel()
 	// RsaKey points at a nonexistent path; inline contents should still win.
 	k := &K6SSH{fs: afero.NewMemMapFs()}
 	auth, err := k.rsaKeyAuthMethod(ConnectionOptions{
@@ -48,6 +50,7 @@ func TestRsaKeyAuthMethod_InlineTakesPrecedenceOverPath(t *testing.T) {
 }
 
 func TestRsaKeyAuthMethod_InvalidInlineKey(t *testing.T) {
+	t.Parallel()
 	k := &K6SSH{fs: afero.NewMemMapFs()}
 	if _, err := k.rsaKeyAuthMethod(ConnectionOptions{PrivateKey: "not a key"}); err == nil {
 		t.Fatal("expected an error for invalid key contents")
